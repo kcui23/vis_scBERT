@@ -122,7 +122,7 @@ def data_mask(data,
         random_no_mask = mask_with_tokens(random_tokens, mask_ignore_token_ids)        # not masked matrix for the random token matrix
         random_token_prob &= ~random_no_mask        # get the pure mask matrix of random token replace
         random_indices = torch.nonzero(random_token_prob, as_tuple=True)        # index of random token replace
-        masked_data[random_indices] = random_tokens[random_indices]        # replace some tokens by random token
+        masked_input[random_indices] = random_tokens[random_indices]        # replace some tokens by random token
     # [mask] input
     replace_prob = prob_mask_like(data, replace_prob)     # get the mask matrix of token being masked
     masked_input = masked_input.masked_fill(mask * replace_prob, mask_token_id)        # get the data has been masked by mask_token

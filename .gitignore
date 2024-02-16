@@ -2,3 +2,7 @@
 **/.Rhistory
 .vscode
 **/__pycache__
+env
+data
+model
+test.*

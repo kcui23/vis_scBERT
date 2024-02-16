@@ -20,6 +20,9 @@ from performer_pytorch import PerformerLM
 import scanpy as sc
 import anndata as ad
 from utils import *
+import pickle as pkl
+
+os.chdir("./scBERT-1.0.0")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--bin_num", type=int, default=5, help='Number of bins.')
@@ -29,8 +32,11 @@ parser.add_argument("--seed", type=int, default=2021, help='Random seed.')
 parser.add_argument("--novel_type", type=bool, default=False, help='Novel cell tpye exists or not.')
 parser.add_argument("--unassign_thres", type=float, default=0.5, help='The confidence score threshold for novel cell type annotation.')
 parser.add_argument("--pos_embed", type=bool, default=True, help='Using Gene2vec encoding or not.')
-parser.add_argument("--data_path", type=str, default='./data/Zheng68K.h5ad', help='Path of data for predicting.')
-parser.add_argument("--model_path", type=str, default='./finetuned.pth', help='Path of finetuned model.')
+parser.add_argument("--data_path", type=str, default='./data/pbmc68k_reduced.h5ad', help='Path of data for predicting.')
+parser.add_argument("--model_path", type=str, default='./model/panglao_pretrain.pth', help='Path of finetuned model.')
+
+
+args = parser.parse_args()
 
 SEED = args.seed
 EPOCHS = args.epoch
@@ -71,7 +77,12 @@ class Identity(torch.nn.Module):
         return x
 
 data = sc.read_h5ad(args.data_path)
-label_dict, label = np.unique(np.array(data.obs['celltype']), return_inverse=True)
+#load the label stored during the fine-tune stage
+with open('label_dict', 'rb') as fp:
+    label_dict = pkl.load(fp)
+with open('label', 'rb') as fp:
+    label = pkl.load(fp)
+
 class_num = np.unique(label, return_counts=True)[1].tolist()
 class_weight = torch.tensor([(1 - (x / sum(class_num))) ** 2 for x in class_num])
 label = torch.from_numpy(label)
@@ -109,7 +120,7 @@ with torch.no_grad():
         pred_logits = model(full_seq)
         softmax = nn.Softmax(dim=-1)
         pred_prob = softmax(pred_logits)
-        pred_final = pred_prob.argmax(dim=-1)
+        pred_final = pred_prob.argmax(dim=-1).item()
         if np.amax(np.array(pred_prob.cpu()), axis=-1) < UNASSIGN_THRES:
             novel_indices.append(index)
         pred_finals.append(pred_final)
