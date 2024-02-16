@@ -32,7 +32,7 @@ parser.add_argument("--seed", type=int, default=2021, help='Random seed.')
 parser.add_argument("--novel_type", type=bool, default=False, help='Novel cell tpye exists or not.')
 parser.add_argument("--unassign_thres", type=float, default=0.5, help='The confidence score threshold for novel cell type annotation.')
 parser.add_argument("--pos_embed", type=bool, default=True, help='Using Gene2vec encoding or not.')
-parser.add_argument("--data_path", type=str, default='./data/pbmc68k_reduced.h5ad', help='Path of data for predicting.')
+parser.add_argument("--data_path", type=str, default='./data/Zheng68k.h5ad', help='Path of data for predicting.')
 parser.add_argument("--model_path", type=str, default='./model/panglao_pretrain.pth', help='Path of finetuned model.')
 
 
