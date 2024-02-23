@@ -1,0 +1,18 @@
+
+
+\begin{dependency}[hide label, edge unit distance=.5ex]
+  \begin{deptext}[column sep=0.05cm]
+  I\& forgot\& to\& bring\& the\& book\& I\& bought\& last\& week\& in\& Madison! \\
+\end{deptext}
+\depedge[edge style={red!60!}, edge below]{4}{6}{.}
+\depedge[edge style={red!60!}, edge below]{8}{10}{.}
+\depedge[edge style={red!60!}, edge below]{5}{6}{.}
+\depedge[edge style={red!60!}, edge below]{9}{10}{.}
+\depedge[edge style={red!60!}, edge below]{1}{2}{.}
+\depedge[edge style={red!60!}, edge below]{6}{12}{.}
+\depedge[edge style={red!60!}, edge below]{10}{11}{.}
+\depedge[edge style={red!60!}, edge below]{2}{4}{.}
+\depedge[edge style={red!60!}, edge below]{3}{4}{.}
+\depedge[edge style={red!60!}, edge below]{11}{12}{.}
+\depedge[edge style={red!60!}, edge below]{7}{8}{.}
+\end{dependency}

@@ -11,4 +11,4 @@ probe:
   distance_params_path: example/data/bertlarge16-distance-probe.params
 reporting:
   root: example/results
-  reporting_methods: uuas
+
