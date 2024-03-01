@@ -1,0 +1,63 @@
+K02108               ATPF0A, atpB; F-type H+-transporting ATPase subunit a 
+K02109               ATPF0B, atpF; F-type H+-transporting ATPase subunit b 
+K02110               ATPF0C, atpE; F-type H+-transporting ATPase subunit c 
+K02111               ATPF1A, atpA; F-type H+/Na+-transporting ATPase subunit alpha [EC:7.1.2.2 7.2.2.1] 
+K02112               ATPF1B, atpD; F-type H+/Na+-transporting ATPase subunit beta [EC:7.1.2.2 7.2.2.1] 
+K02113               ATPF1D, atpH; F-type H+-transporting ATPase subunit delta 
+K02114               ATPF1E, atpC; F-type H+-transporting ATPase subunit epsilon 
+K02115               ATPF1G, atpG; F-type H+-transporting ATPase subunit gamma 
+K02634               petA; apocytochrome f 
+K02635               petB; cytochrome b6 
+K02636               petC; cytochrome b6-f complex iron-sulfur subunit [EC:7.1.1.6] 
+K02637               petD; cytochrome b6-f complex subunit 4 
+K02638               petE; plastocyanin 
+K02639               petF; ferredoxin 
+K02640               petG; cytochrome b6-f complex subunit 5 
+K02641               petH; ferredoxin--NADP+ reductase [EC:1.18.1.2] 
+K02642               petL; cytochrome b6-f complex subunit 6 
+K02643               petM; cytochrome b6-f complex subunit 7 
+K02689               psaA; photosystem I P700 chlorophyll a apoprotein A1 [EC:1.97.1.12] 
+K02690               psaB; photosystem I P700 chlorophyll a apoprotein A2 [EC:1.97.1.12] 
+K02691               psaC; photosystem I iron-sulfur center [EC:1.97.1.12] 
+K02692               psaD; photosystem I subunit II 
+K02693               psaE; photosystem I subunit IV 
+K02694               psaF; photosystem I subunit III 
+K02695               psaH; photosystem I subunit VI 
+K02696               psaI; photosystem I subunit VIII 
+K02697               psaJ; photosystem I subunit IX 
+K02698               psaK; photosystem I subunit X 
+K02699               psaL; photosystem I subunit XI 
+K02700               psaM; photosystem I subunit XII 
+K02701               psaN; photosystem I subunit PsaN 
+K02702               psaX; photosystem I 4.8kDa protein 
+K02703               psbA; photosystem II P680 reaction center D1 protein [EC:1.10.3.9] 
+K02704               psbB; photosystem II CP47 chlorophyll apoprotein 
+K02705               psbC; photosystem II CP43 chlorophyll apoprotein 
+K02706               psbD; photosystem II P680 reaction center D2 protein [EC:1.10.3.9] 
+K02707               psbE; photosystem II cytochrome b559 subunit alpha 
+K02708               psbF; photosystem II cytochrome b559 subunit beta 
+K02709               psbH; photosystem II PsbH protein 
+K02710               psbI; photosystem II PsbI protein 
+K02711               psbJ; photosystem II PsbJ protein 
+K02712               psbK; photosystem II PsbK protein 
+K02713               psbL; photosystem II PsbL protein 
+K02714               psbM; photosystem II PsbM protein 
+K02716               psbO; photosystem II oxygen-evolving enhancer protein 1 
+K02717               psbP; photosystem II oxygen-evolving enhancer protein 2 
+K02718               psbT; photosystem II PsbT protein 
+K02719               psbU; photosystem II PsbU protein 
+K02720               psbV; photosystem II cytochrome c550 
+K02721               psbW; photosystem II PsbW protein 
+K02722               psbX; photosystem II PsbX protein 
+K02723               psbY; photosystem II PsbY protein 
+K02724               psbZ; photosystem II PsbZ protein 
+K03541               psbR; photosystem II 10kDa protein 
+K03542               psbS; photosystem II 22kDa protein 
+K03689               petN; cytochrome b6-f complex subunit 8 
+K08901               psbQ; photosystem II oxygen-evolving enhancer protein 3 
+K08902               psb27; photosystem II Psb27 protein 
+K08903               psb28; photosystem II 13kDa protein 
+K08904               psb28-2; photosystem II Psb28-2 protein 
+K08905               psaG; photosystem I subunit V 
+K08906               petJ; cytochrome c6 
+K14332               psaO; photosystem I subunit PsaO 
