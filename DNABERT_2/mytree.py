@@ -69,23 +69,62 @@ def find_distance_to_ancestor(ancestor, node):
     
     return -1
 
-def find_deepest_node(root, name_begin):
-    if not root:
-        return None
+def find_deepest_node(root, name_begin, from_root_get_all=False):
+    if not from_root_get_all:
+        if not root:
+            return None
 
-    deepest_node = None
-    max_depth = -1
+        deepest_node = None
+        max_depth = -1
 
-    def dfs(node, depth):
-        nonlocal deepest_node, max_depth
+        def dfs(node, depth):
+            nonlocal deepest_node, max_depth
 
-        if (not node.value is None) and depth > max_depth:
-            if (node.value.startswith(name_begin) and depth == 0) or depth > 0:
+            if (not node.value is None) and depth > max_depth:
+                if (node.value.startswith(name_begin) and depth == 0) or depth > 0:
+                    max_depth = depth
+                    deepest_node = node
+
+            for child in node.children:
+                dfs(child, depth + 1)
+
+        dfs(root, 0)
+        return deepest_node, max_depth
+    
+    else:
+    #  in this case, we want to get all the deepest nodes in this tree and ignore the name_begin
+        if not root:
+            return None
+
+        deepest_nodes = []
+        max_depth = -1
+
+        def dfs(node, depth):
+            nonlocal deepest_nodes, max_depth
+
+            if depth > max_depth:
                 max_depth = depth
-                deepest_node = node
+                deepest_nodes = [node]
+            elif depth == max_depth:
+                deepest_nodes.append(node)
 
-        for child in node.children:
-            dfs(child, depth + 1)
+            for child in node.children:
+                dfs(child, depth + 1)
 
-    dfs(root, 0)
-    return deepest_node, max_depth
+        dfs(root, 0)
+        return deepest_nodes, max_depth
+
+
+def drop_none_nodes(node):
+    def sub_drop(node):
+        if not node:
+            return None
+        node.children = [drop_none_nodes(child) for child in node.children if child is not None]
+        if node.value is None and not node.children:
+            return None
+        
+        return node
+    
+    node = sub_drop(node)
+    node = sub_drop(node)
+    return node
