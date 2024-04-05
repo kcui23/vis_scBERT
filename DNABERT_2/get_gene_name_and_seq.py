@@ -161,6 +161,9 @@ def clean_raw_pathway_str(raw, name=''):
     l=[]
     for i in raw.split('\n'):
         if i:
-            p = name + i.split()[0]
+            p = i.split()[0]
+            if p.startswith(name):
+                p = p[len(name):]
+            p = name + p
             l.append(p)
     return l
