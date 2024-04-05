@@ -112,7 +112,7 @@ def pathway2NTseq_hsa(pathway_list, output_name='hsa_NT_seq_dict', save=True):
         with open(output_name+'.pkl', 'wb') as f:
             pickle.dump(result, f)
 
-def pathway2NTseq_cmiu(pathway_list, output_name='cmiu_NT_seq_dict', save=True):
+def pathway2NTseq_cmiu(pathway_list, output_name='cmiu_NT_seq_dict', save=True, lmt_len_mode=True):
     '''
     Input: 
     - pathway_list, list of pathway names
@@ -136,7 +136,10 @@ def pathway2NTseq_cmiu(pathway_list, output_name='cmiu_NT_seq_dict', save=True):
     path_dict = {}
     for i in tqdm(range(len(pathway_list)), desc='Getting gene links'):
         link_i = prefix + pathway_list[i]
-        path_dict[pathway_list[i]] = get_cmiu_gene_link(link_i)
+        l = get_cmiu_gene_link(link_i)
+        if lmt_len_mode and len(l) > 50:
+            continue
+        path_dict[pathway_list[i]] = l
     
     result = {}
     for k,v in tqdm(path_dict.items(), desc='Getting NT sequences'):
