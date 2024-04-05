@@ -1,3 +1,6 @@
+# TODO: 
+# many fucntions are duplicated, need to clean up, can be generalized and merged into one function
+
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
@@ -96,8 +99,8 @@ def pathway2NTseq_hsa(pathway_list, output_name='hsa_NT_seq_dict', save=True):
         path_dict[pathway_list[i]] = get_hsa_gene_link(link_i)
     
     result = {}
-    nt_dict = {}
     for k,v in tqdm(path_dict.items(), desc='Getting NT sequences'):
+        nt_dict = {}
         for i in v:
             nt_link = 'https://www.kegg.jp'+i
             name = i.split('/')[-1]
@@ -109,9 +112,52 @@ def pathway2NTseq_hsa(pathway_list, output_name='hsa_NT_seq_dict', save=True):
         with open(output_name+'.pkl', 'wb') as f:
             pickle.dump(result, f)
 
-def clean_raw_pathway_str(raw):
+def pathway2NTseq_cmiu(pathway_list, output_name='cmiu_NT_seq_dict', save=True):
+    '''
+    Input: 
+    - pathway_list, list of pathway names
+    - output_name, str, output file name
+    - save, bool, save the output or not
+    
+    Output:
+    - list of dict, dict: {gene_name: NT_seq}
+    '''
+    def get_cmiu_gene_link(url):
+        l=[]
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, 'html.parser')
+        for i in soup.find_all('a'):
+            href = i.get('href')
+            if href is not None and href.startswith('/entry/cmiu:'):
+                l.append(href)
+        return l
+    
+    prefix = "https://www.kegg.jp/entry/pathway+"
+    path_dict = {}
+    for i in tqdm(range(len(pathway_list)), desc='Getting gene links'):
+        link_i = prefix + pathway_list[i]
+        path_dict[pathway_list[i]] = get_cmiu_gene_link(link_i)
+    
+    result = {}
+    for k,v in tqdm(path_dict.items(), desc='Getting NT sequences'):
+        nt_dict = {}
+        for i in v:
+            nt_link = 'https://www.kegg.jp'+i
+            name = i.split('/')[-1]
+            _, seq = get_NT_seq(nt_link)
+            nt_dict[name] = seq
+        result[k] = nt_dict
+    
+    if save:
+        with open(output_name+'.pkl', 'wb') as f:
+            pickle.dump(result, f)
+    
+    return result
+
+def clean_raw_pathway_str(raw, name=''):
     l=[]
     for i in raw.split('\n'):
         if i:
-            l.append(i.split()[0])
+            p = name + i.split()[0]
+            l.append(p)
     return l
