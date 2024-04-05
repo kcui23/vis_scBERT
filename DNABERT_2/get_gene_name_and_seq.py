@@ -67,3 +67,51 @@ def pathway_to_NT_seq(pathway_gene_name_filename, gene_link_K_page_filename, gen
     
     with open(nt_seq_dic_pkl_filename, 'wb') as pickle_file:
         pickle.dump(nt_seq, pickle_file)
+
+
+def pathway2NTseq_hsa(pathway_list, output_name='hsa_NT_seq_dict', save=True):
+    '''
+    Input: 
+    - pathway_list, list of pathway names
+    - output_name, str, output file name
+    - save, bool, save the output or not
+    
+    Output:
+    - list of dict, dict: {gene_name: NT_seq}
+    '''
+    def get_hsa_gene_link(url):
+        l=[]
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, 'html.parser')
+        for i in soup.find_all('a'):
+            href = i.get('href')
+            if href is not None and href.startswith('/entry/hsa:'):
+                l.append(href)
+        return l
+    
+    prefix = "https://www.kegg.jp/entry/pathway+"
+    path_dict = {}
+    for i in tqdm(range(len(pathway_list)), desc='Getting gene links'):
+        link_i = prefix + pathway_list[i]
+        path_dict[pathway_list[i]] = get_hsa_gene_link(link_i)
+    
+    result = {}
+    nt_dict = {}
+    for k,v in tqdm(path_dict.items(), desc='Getting NT sequences'):
+        for i in v:
+            nt_link = 'https://www.kegg.jp'+i
+            name = i.split('/')[-1]
+            _, seq = get_NT_seq(nt_link)
+            nt_dict[name] = seq
+        result[k] = nt_dict
+    
+    if save:
+        with open(output_name+'.pkl', 'wb') as f:
+            pickle.dump(result, f)
+
+def clean_raw_pathway_str(raw):
+    l=[]
+    for i in raw.split('\n'):
+        if i:
+            l.append(i.split()[0])
+    return l
