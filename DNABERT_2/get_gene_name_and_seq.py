@@ -279,3 +279,36 @@ def build_sentences(gene_name, neighbors, prefix='cmiu:', sentence_length=None):
         sent, indices = _single_sentence_group(gene_name, v, prefix)
         sentences[k] = (sent, indices)
     return sentences
+
+def find_gene_with_neib(brite_str:str, min_n_occur=5, species='cmiu'):
+    '''
+    **Inputs**:
+    - brite_str: str, e.g. brite_str, _ = get_tidy_brite('cmiu00001')
+    - min_n_occur: int, the minimum number of occurrences of a gene in the BRITE hierarchy
+    - species: str, e.g. 'cmiu'
+    
+    **Outputs**:
+    - generator, each element is a tuple of gene name and its neighbors
+    
+    **Example**:
+    
+    >>> from itertools import islice
+    >>> min_n_occur = 5
+    >>> for gene, neighbors in islice(find_gene_with_neib(brite_str, min_n_occur), 10):
+    >>>     print(f"Gene: {gene}")
+    >>>     print(f"Neighbors: {neighbors}")
+    >>>     print("---")
+    '''
+    # get all genes
+    url = "https://rest.kegg.jp/list/" + species
+    r = requests.get(url)
+    genes = r.text.split('\n')
+    for i in range(len(genes)):
+        if genes[i]:
+            genes[i] = genes[i].split(':')[1].split('\t')[0]
+    gene_names = genes[:-1]
+    
+    for i in gene_names:
+        neighbors = find_neighbors(i, brite_str)
+        if len(neighbors) >= min_n_occur:
+            yield i, neighbors
