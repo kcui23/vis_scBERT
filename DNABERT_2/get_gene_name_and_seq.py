@@ -298,6 +298,15 @@ def find_gene_with_neib(brite_str:str, min_n_occur=5, species='cmiu'):
     >>>     print(f"Gene: {gene}")
     >>>     print(f"Neighbors: {neighbors}")
     >>>     print("---")
+    
+    Or
+    >>> a = find_gene_with_neib(brite_str, min_n_occur)
+    >>> gene, neighbors = next(a)
+    >>> print(f"Gene: {gene}")
+    >>> print(f"Neighbors: {neighbors}")
+    >>> gene, neighbors = next(a)
+    >>> print(f"Gene: {gene}")
+    >>> print(f"Neighbors: {neighbors}")
     '''
     # get all genes
     url = "https://rest.kegg.jp/list/" + species
