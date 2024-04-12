@@ -244,6 +244,7 @@ def build_sentences(gene_name, neighbors, prefix='cmiu:', sentence_length=None):
     
     def _single_sentence_group(gene_name, local_neighbor, prefix):
         sent = []
+        indices = []
         n_sentences = _get_n_sentences(local_neighbor, sentence_length)
         
         for t in range(n_sentences):
@@ -261,18 +262,19 @@ def build_sentences(gene_name, neighbors, prefix='cmiu:', sentence_length=None):
                 nt_seq = get_nt_seq_tidy(i, prefix)
                 if nt_seq:
                     nt_seqs.append(nt_seq)
+                    indices.append(local_neighbor.index(i))
             tmp_sentence = ' '.join(nt_seqs)
             sent.append(tmp_sentence)
-        return sent
-    
+        return sent, indices
+
     def _get_n_sentences(local_neighbor, sentence_length):
         # TODO: implement a better way to determine the number of sentences
-        
         if len(local_neighbor) < 5:
             return 1
         return 5
-    
+
     sentences = {}
     for k, v in tqdm(neighbors.items()):
-        sentences[k] = _single_sentence_group(gene_name, v, prefix)
+        sent, indices = _single_sentence_group(gene_name, v, prefix)
+        sentences[k] = (sent, indices)
     return sentences
