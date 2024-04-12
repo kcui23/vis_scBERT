@@ -4,6 +4,7 @@
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+import re
 import pickle
 
 def get_gene_link(url):
@@ -180,3 +181,15 @@ def get_tidy_brite(brite_name):
     r = requests.get(url+'/json')
     soup2 = r.json()
     return soup1 ,soup2
+
+def get_nt_seq_tidy(gene_name, prefix='cmiu:'):
+    url = "https://rest.kegg.jp/get/" + prefix + gene_name
+    r = requests.get(url)
+    s = BeautifulSoup(r.text, 'html.parser').text
+    split_soup = s.split('\n')
+    for i in range(len(split_soup)):
+        if split_soup[i].startswith('NT'):
+            raw_s = ''.join(split_soup[i+1:])
+            return(re.sub(r"[ /]", "", raw_s)).upper()
+    
+    return None
