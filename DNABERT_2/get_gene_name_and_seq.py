@@ -167,3 +167,16 @@ def clean_raw_pathway_str(raw, name=''):
             p = name + p
             l.append(p)
     return l
+
+def get_tidy_brite(brite_name):
+    '''
+    *Input*: brite_name: str, e.g. cmiu04131 
+    *Output*: soup1: str, soup2: dict
+    '''
+    url = "https://rest.kegg.jp/get/br:" + brite_name
+    r = requests.get(url)
+    soup1 = BeautifulSoup(r.text, 'html.parser')
+    soup1 = soup1.text
+    r = requests.get(url+'/json')
+    soup2 = r.json()
+    return soup1 ,soup2
