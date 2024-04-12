@@ -240,14 +240,14 @@ def find_neighbors(gene_name:str, brite_str:str):
     
     return neighbors
 
-def build_sentences(gene_name, neighbors, prefix='cmiu:', sentence_length=None):
+def build_sentences(gene_name, neighbors, prefix='cmiu:', sentence_length=.6, n_sentences=5):
     
     def _single_sentence_group(gene_name, local_neighbor, prefix):
         sent = []
         indices = []
-        n_sentences = _get_n_sentences(local_neighbor, sentence_length)
+        n_sent = _get_n_sentences(local_neighbor, sentence_length, n_sentences)
         
-        for t in range(n_sentences):
+        for t in range(n_sent):
             if len(local_neighbor) < 5:
                 names = random.sample(local_neighbor, len(local_neighbor))
             else:
@@ -268,11 +268,11 @@ def build_sentences(gene_name, neighbors, prefix='cmiu:', sentence_length=None):
             indices.append(names.index(gene_name))
         return sent, indices
 
-    def _get_n_sentences(local_neighbor, sentence_length):
+    def _get_n_sentences(local_neighbor, sentence_length, n_sentences):
         # TODO: implement a better way to determine the number of sentences
         if len(local_neighbor) < 5:
             return 1
-        return 5
+        return n_sentences
 
     sentences = {}
     for k, v in tqdm(neighbors.items()):
