@@ -1,6 +1,7 @@
 # TODO: 
 # many fucntions are duplicated, need to clean up, can be generalized and merged into one function
 
+import random
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
@@ -193,3 +194,85 @@ def get_nt_seq_tidy(gene_name, prefix='cmiu:'):
             return(re.sub(r"[ /]", "", raw_s)).upper()
     
     return None
+
+def find_neighbors(gene_name:str, brite_str:str):
+    '''
+    **Inputs**:
+    - gene_name: str, e.g. B1H56_02580
+    - brite_str: str, e.g. brite_str, _ = get_tidy_brite('cmiu00001')
+    
+    **Outputs**:
+    - neighbors: dict, keys are the hierarchies, values are the gene names. 
+    hier be like '09100 Metabolism -> 09101 Carbohydrate metabolism -> 00500 Starch and sucrose metabolism [PATH:cmiu00500] -> B1H56_01825 carbohydrate kinase\tK00847 E2.7.1.4; fructokinase [EC:2.7.1.4]'
+    '''
+    neighbors = {}
+    level = ['A','B']
+    hier = ''
+    names = []
+    
+    for i in brite_str.split('\n'):
+        if i:
+            tmp = i[1:].strip().split()
+            
+            flag = False # flag to indicate whether it is time to update the hier
+            if i[0] in ('A', 'B', 'C', 'D', 'E', 'F', 'G'):
+                level[1] = i[0]
+                flag = True
+            if level[1] == 'A':
+                hier = i[1:].strip()
+            elif flag:
+                if level[1]>level[0]:
+                    hier += ' -> ' + i[1:].strip()
+                    if tmp and tmp[0].startswith(gene_name[:3]):
+                        names.append(tmp[0])
+                if level[1]==level[0]:
+                    # back to the previous level
+                    hier = ''.join([i+' -> ' for i in hier.split(' -> ')[:-1]]) + i[1:].strip()
+                    if tmp and tmp[0].startswith(gene_name[:3]):
+                        names.append(tmp[0])
+                if level[1]<level[0]:
+                    # back to the previous level twice
+                    if gene_name in names:
+                        neighbors[hier] = names
+                    hier = ''.join([i+' -> ' for i in hier.split(' -> ')[:-2]]) + i[1:].strip()
+                    names = []
+            level[0] = level[1]
+    
+    return neighbors
+
+def build_sentences(gene_name, neighbors, prefix='cmiu:', sentence_length=None):
+    
+    def _single_sentence_group(gene_name, local_neighbor, prefix):
+        sent = []
+        n_sentences = _get_n_sentences(local_neighbor, sentence_length)
+        
+        for t in range(n_sentences):
+            if len(local_neighbor) < 5:
+                names = random.sample(local_neighbor, len(local_neighbor))
+            else:
+                if len(local_neighbor) < 50:
+                    vol = int(len(local_neighbor) * .6)
+                    while True:
+                        names = random.sample(local_neighbor, vol)
+                        if gene_name in names:
+                            break
+            nt_seqs = []
+            for i in names:
+                nt_seq = get_nt_seq_tidy(i, prefix)
+                if nt_seq:
+                    nt_seqs.append(nt_seq)
+            tmp_sentence = ' '.join(nt_seqs)
+            sent.append(tmp_sentence)
+        return sent
+    
+    def _get_n_sentences(local_neighbor, sentence_length):
+        # TODO: implement a better way to determine the number of sentences
+        
+        if len(local_neighbor) < 5:
+            return 1
+        return 5
+    
+    sentences = {}
+    for k, v in tqdm(neighbors.items()):
+        sentences[k] = _single_sentence_group(gene_name, v, prefix)
+    return sentences
