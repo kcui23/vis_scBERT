@@ -262,9 +262,10 @@ def build_sentences(gene_name, neighbors, prefix='cmiu:', sentence_length=None):
                 nt_seq = get_nt_seq_tidy(i, prefix)
                 if nt_seq:
                     nt_seqs.append(nt_seq)
-                    indices.append(local_neighbor.index(i))
+            
             tmp_sentence = ' '.join(nt_seqs)
             sent.append(tmp_sentence)
+            indices.append(names.index(gene_name))
         return sent, indices
 
     def _get_n_sentences(local_neighbor, sentence_length):
